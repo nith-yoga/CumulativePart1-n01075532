@@ -5,10 +5,17 @@
 
 <div id="containerList">
 <h2>List of Teachers</h2>
+    <a href="/Teacher/New">Add a new teacher</a>
+    <form method="GET" action="/Teacher/List">
+        <div>
+            <input type="text" name="SearchKey" />
+            <input type="submit" value="Search" />
+        </div>
+    </form>
 @foreach (var Teachers in Model)
             {
                 <div class="listitem row">
-                    <div class="col-md-12"><a href="/Teacher/Show/@Teachers.TeacherId">@Teachers.TeacherName</a></div>
+                    <div class="col-md-12"><a href="/Teacher/Show/@Teachers.TeacherId">@Teachers.TeacherFname @Teachers.TeacherLname</a></div>
                 </div>
             }
 </div>
