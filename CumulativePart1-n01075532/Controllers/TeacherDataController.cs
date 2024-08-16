@@ -66,7 +66,7 @@ namespace CumulativePart1_n01075532.Controllers
                 int teacherId = (int)ResultSet["teacherid"];
                 string TeacherFname = ResultSet["teacherfname"].ToString();
                 string TeacherLname = ResultSet["teacherlname"].ToString();
-                string TeacherNumber = ResultSet["TeacherNumber"].ToString();
+                string TeacherNumber = ResultSet["employeenumber"].ToString();
                 string HireDate = ResultSet["hiredate"].ToString();
 
                 NewTeacher.TeacherId = TeacherId;
@@ -118,6 +118,43 @@ namespace CumulativePart1_n01075532.Controllers
 
             Conn.Close();
 
+        }
+
+        public void UpdateTeacher(int id, [FromBody]Teachers TeacherInfo)
+        {
+            MySqlConnection Conn = School.AccessDatabase();
+            try
+            {
+                
+                Conn.Open();
+
+                MySqlCommand cmd = Conn.CreateCommand();
+
+                cmd.CommandText = "UPDATE teachers SET teacherfname=@TeacherFname, teacherlname=@TeacherLname, teachernumber=@TeacherNumber, salary=@TeacherSalary WHERE teacherid=@TeacherId";
+                cmd.Parameters.AddWithValue("@TeacherFname", TeacherInfo.TeacherFname);
+                cmd.Parameters.AddWithValue("@TeacherLname", TeacherInfo.TeacherLname);
+                cmd.Parameters.AddWithValue("@TeacherNumber", TeacherInfo.TeacherNumber);
+                cmd.Parameters.AddWithValue("@TeacherSalary", TeacherInfo.Salary);
+                cmd.Parameters.AddWithValue("@TeacherId", TeacherInfo.TeacherId);
+                cmd.Prepare();
+
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex);
+                throw new ApplicationException("There was an issue in the database", ex);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                throw new ApplicationException("There was an issue with the server", ex);
+            }
+            finally
+            {
+                Conn.Close();
+            }
         }
     }
 }
